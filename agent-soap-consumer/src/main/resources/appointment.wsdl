@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:sch="www.rent-a-car.ws.xml.rs/appointment" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="www.rent-a-car.ws.xml.rs/appointment" targetNamespace="www.rent-a-car.ws.xml.rs/appointment">
+  <wsdl:types>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="www.rent-a-car.ws.xml.rs/appointment">
+    <xs:element name="allAppointmentsRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="company" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="allAppointmentsResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="appointments" type="tns:AppointmentXML"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="createAppointmentRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="appointment" type="tns:AppointmentXML"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="createAppointmentResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="success" type="xs:boolean"/>
+                <xs:element name="message" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="AppointmentXML">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="userId" type="xs:long"/>
+            <xs:element name="company" type="xs:long"/>
+            <xs:element name="start" type="xs:string"/>
+            <xs:element name="end" type="xs:string"/>
+            <xs:element name="status" type="xs:string"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="items" type="tns:AppointmentItemXML"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="AppointmentItemXML">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="carId" type="xs:long"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="allAppointmentsRequest">
+    <wsdl:part element="tns:allAppointmentsRequest" name="allAppointmentsRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="allAppointmentsResponse">
+    <wsdl:part element="tns:allAppointmentsResponse" name="allAppointmentsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createAppointmentRequest">
+    <wsdl:part element="tns:createAppointmentRequest" name="createAppointmentRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createAppointmentResponse">
+    <wsdl:part element="tns:createAppointmentResponse" name="createAppointmentResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="AppointmentPort">
+    <wsdl:operation name="allAppointments">
+      <wsdl:input message="tns:allAppointmentsRequest" name="allAppointmentsRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:allAppointmentsResponse" name="allAppointmentsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="createAppointment">
+      <wsdl:input message="tns:createAppointmentRequest" name="createAppointmentRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:createAppointmentResponse" name="createAppointmentResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="AppointmentPortSoap11" type="tns:AppointmentPort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="allAppointments">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="allAppointmentsRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="allAppointmentsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="createAppointment">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="createAppointmentRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="createAppointmentResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="AppointmentPortService">
+    <wsdl:port binding="tns:AppointmentPortSoap11" name="AppointmentPortSoap11">
+      <soap:address location="http://DESKTOP-UVNRQ0Q:8080/ws"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

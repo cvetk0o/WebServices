@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    targetNamespace="www.rent-a-car.ws.xml.rs/filter-and-search"
+    xmlns:tns="www.rent-a-car.ws.xml.rs/filter-and-search">
+    <xs:complexType name="CarXML">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="plateNumber" type="xs:string"/>
+            <xs:element name="model" type="tns:IdNameXML"/>
+            <xs:element name="brand" type="tns:IdNameXML"/>
+            <xs:element name="fuelType" type="tns:IdNameXML"/>
+            <xs:element name="transmission" type="tns:IdNameXML"/>
+            <xs:element name="carClass" type="tns:IdNameXML"/>
+            <xs:element name="company" type="xs:long"/>
+            <xs:element name="owner" type="xs:long"/>
+            <xs:element name="priceList" type="tns:PriceListXML"/>
+            <xs:element name="mileage" type="xs:double"/>
+            <xs:element name="distanceAllowed" type="xs:double"/>
+            <xs:element name="protection" type="xs:boolean"/>
+            <xs:element name="childSeats" type="xs:int"/>
+            <xs:element name="discount" type="xs:double"/>
+            <xs:element name="images">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" name="image" type="tns:IdNameXML"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="IdNameXML">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="name" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="PriceListXML">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="regularPrice" type="xs:double"/>
+            <xs:element name="limitedPrice" type="xs:double"/>
+            <xs:element name="collisionDamageWaiver" type="xs:double"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="getAllPriceListsRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="getAllPriceListsResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="lists" type="tns:PriceListXML"
+                />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="createPriceListRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="priceList" type="tns:PriceListXML"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="createCarRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="car" type="tns:CarXML"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="ApiResponseXML">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="message" type="xs:string"/>
+                <xs:element name="success" type="xs:boolean"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="removeCarRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="carId" type="xs:long"/>
+                <xs:element name="companyId" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="updateCarRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="car" type="tns:CarXML"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="getAllCompanyDataRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="company" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="getAllCompanyDataResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="cars" type="tns:CarXML"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="brands" type="tns:IdNameXML"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="models" type="tns:IdNameXML"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="fuelTypes"
+                    type="tns:IdNameXML"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="carClasses"
+                    type="tns:IdNameXML"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="transmissions"
+                    type="tns:IdNameXML"/>
+                <xs:element name="priceLists" type="tns:PriceListXML" maxOccurs="unbounded"
+                    minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

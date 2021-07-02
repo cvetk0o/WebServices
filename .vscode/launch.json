@@ -1,0 +1,18 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - NetflixZuulGatewayServerApplication",
+            "request": "launch",
+            "mainClass": "rs.xml.ws.netflixzuulgatewayserver.NetflixZuulGatewayServerApplication",
+            "projectName": "netflix-zuul-gateway-server"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - NetflixEurekaNamingServerApplication",
+            "request": "launch",
+            "mainClass": "rs.xml.ws.netflixeurekanamingserver.NetflixEurekaNamingServerApplication",
+            "projectName": "netflix-eureka-naming-server"
+        }
+    ]
+}

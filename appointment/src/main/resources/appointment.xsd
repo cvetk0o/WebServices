@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    targetNamespace="www.rent-a-car.ws.xml.rs/appointment"
+    xmlns:tns="www.rent-a-car.ws.xml.rs/appointment">
+    <xs:element name="allAppointmentsRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="company" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="allAppointmentsResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="appointments"
+                    type="tns:AppointmentXML"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="createAppointmentRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="appointment" type="tns:AppointmentXML"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="createAppointmentResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="success" type="xs:boolean"/>
+                <xs:element name="message" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="AppointmentXML">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="userId" type="xs:long"/>
+            <xs:element name="company" type="xs:long"/>
+            <xs:element name="start" type="xs:string"/>
+            <xs:element name="end" type="xs:string"/>
+            <xs:element name="status" type="xs:string"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="items"
+                type="tns:AppointmentItemXML"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="AppointmentItemXML">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="carId" type="xs:long"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    targetNamespace="www.rent-a-car.ws.xml.rs/rating-and-comment"
+    xmlns:tns="www.rent-a-car.ws.xml.rs/rating-and-comment">
+    <xs:complexType name="CommentXML">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="user" type="xs:long"/>
+            <xs:element name="car" type="xs:long"/>
+            <xs:element name="comment" type="xs:string"/>
+            <xs:element name="verified" type="xs:boolean"/>
+            <xs:element name="isResponse" type="xs:boolean"/>
+            <xs:element name="commentId" type="xs:long"/>
+            <xs:element name="createdAt" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="RatingXML">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="car" type="xs:long"/>
+            <xs:element name="user" type="xs:long"/>
+            <xs:element name="rating">
+                <xs:simpleType>
+                    <xs:restriction base="xs:int">
+                        <xs:minExclusive value="0"/>
+                        <xs:maxExclusive value="6"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="createdAt" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="commentRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="comment" type="tns:CommentXML"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="commentResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="success" type="xs:boolean"/>
+                <xs:element name="message" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="allCommentsRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="company" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="allCommentsResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="comments"
+                    type="tns:CommentXML"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="allRatingRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="company" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="allRatingResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="ratings" type="tns:RatingXML"
+                />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

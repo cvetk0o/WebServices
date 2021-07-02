@@ -1,0 +1,215 @@
+version: '3.7'
+# Removed subprocess.CalledProcessError: Command '['/usr/local/bin/docker-credential-desktop', 'get']' returned non-zero exit status 1
+# I had this:
+# cat ~/.docker/config.json
+# {"auths":{},"credsStore":"", "credsStore":"desktop","stackOrchestrator":"swarm"}
+# I updated to this:
+# {"auths":{},"credsStore":"","stackOrchestrator":"swarm"}
+services:
+
+  rabbitmq:
+    image: rabbitmq:3.5.3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    restart: always
+    networks:
+      - xml-ws-rs-network
+
+  netflix-eureka-naming-server:
+    image: zeljam/netflix-eureka-naming-server:0.0.1-SNAPSHOT
+    container_name: netflix-eureka-naming-server
+    build:
+      context: netflix-eureka-naming-server
+      dockerfile: Dockerfile
+    ports:
+      - "8761:8761"
+    restart: always
+    networks:
+      - xml-ws-rs-network
+
+  zipkin-server:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    environment:
+      STORAGE_TYPE: mem
+      RABBIT_URI: amqp://guest:guest@rabbitmq:5672
+    ports:
+      - "9412:9411"
+    restart: always
+    depends_on:
+      - rabbitmq
+    networks:
+      - xml-ws-rs-network
+
+  netflix-zuul-gateway-server:
+    image: zeljam/netflix-zuul-gateway-server:0.0.1-SNAPSHOT
+    container_name: netflix-zuul-gateway-server
+    build:
+      context: netflix-zuul-gateway-server
+      dockerfile: Dockerfile
+    ports:
+      - "8765:8765"
+    restart: always
+    depends_on: # Start the depends_on first
+    - mysql 
+    - netflix-eureka-naming-server
+    - zipkin-server
+    - rabbitmq
+    environment:
+      RDS_HOSTNAME: mysql
+      RDS_PORT: 3306
+      RDS_DB_NAME: xml
+      RDS_USERNAME: root
+      RDS_PASSWORD: password
+      RDS_NAMING_SERVER: netflix-eureka-naming-server
+      RDS_RABBIT: rabbitmq
+      STORAGE_TYPE: mem
+      RABBIT_URI: amqp://guest:guest@rabbitmq:5672
+    networks:
+      - xml-ws-rs-network
+    
+
+  rating-and-comment:
+    container_name: rating-and-comment
+    image: zeljam/rating-and-comment:0.0.1-SNAPSHOT
+    build:
+      context: rating-and-comment
+      dockerfile: Dockerfile
+    ports:
+      - "8060:8060"
+    restart: always
+    depends_on: # Start the depends_on first
+      - mysql 
+      - netflix-eureka-naming-server
+      - appointment
+      - netflix-zuul-gateway-server
+      - zipkin-server
+      - rabbitmq
+    environment:
+      RDS_HOSTNAME: mysql
+      RDS_PORT: 3306
+      RDS_DB_NAME: xml
+      RDS_USERNAME: root
+      RDS_PASSWORD: password
+      RDS_NAMING_SERVER: netflix-eureka-naming-server
+      RDS_RABBIT: rabbitmq
+      STORAGE_TYPE: mem
+      RABBIT_URI: amqp://guest:guest@rabbitmq:5672
+    networks:
+      - xml-ws-rs-network
+  
+  filter-and-search:
+    container_name: filter-and-search
+    image: zeljam/filter-and-search:0.0.1-SNAPSHOT
+    build:
+      context: filter-and-search
+      dockerfile: Dockerfile
+    ports:
+      - "8010:8010"
+    restart: always
+    depends_on: # Start the depends_on first
+      - mysql 
+      - netflix-eureka-naming-server
+      - appointment
+      - netflix-zuul-gateway-server
+      - zipkin-server
+      - rabbitmq
+    environment:
+      RDS_HOSTNAME: mysql
+      RDS_PORT: 3306
+      RDS_DB_NAME: xml
+      RDS_USERNAME: root
+      RDS_PASSWORD: password
+      RDS_NAMING_SERVER: netflix-eureka-naming-server
+      RDS_RABBIT: rabbitmq
+      STORAGE_TYPE: mem
+      RABBIT_URI: amqp://guest:guest@rabbitmq:5672
+    networks:
+      - xml-ws-rs-network
+
+
+  appointment:
+    container_name: appointment
+    image: zeljam/appointment:0.0.1-SNAPSHOT
+    build:
+      context: appointment
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    restart: always
+    depends_on: # Start the depends_on first
+      - mysql 
+      - netflix-eureka-naming-server
+      - zipkin-server
+      - rabbitmq
+    environment:
+      RDS_HOSTNAME: mysql
+      RDS_PORT: 3306
+      RDS_DB_NAME: xml
+      RDS_USERNAME: root
+      RDS_PASSWORD: password
+      RDS_NAMING_SERVER: netflix-eureka-naming-server
+      RDS_RABBIT: rabbitmq
+      STORAGE_TYPE: mem
+      RABBIT_URI: amqp://guest:guest@rabbitmq:5672
+    networks:
+      - xml-ws-rs-network
+          
+
+  message:
+    container_name: message
+    image: zeljam/message:0.0.1-SNAPSHOT
+    build:
+      context: message
+      dockerfile: Dockerfile
+    ports:
+      - "8070:8070"
+    restart: always
+    depends_on: # Start the depends_on first
+      - mysql 
+      - netflix-eureka-naming-server
+      - appointment
+      - netflix-zuul-gateway-server
+      - zipkin-server
+      - rabbitmq
+    environment:
+      RDS_HOSTNAME: mysql
+      RDS_PORT: 3306
+      RDS_DB_NAME: xml
+      RDS_USERNAME: root
+      RDS_PASSWORD: password
+      RDS_NAMING_SERVER: netflix-eureka-naming-server
+      RDS_RABBIT: rabbitmq
+      STORAGE_TYPE: mem
+      RABBIT_URI: amqp://guest:guest@rabbitmq:5672
+    networks:
+      - xml-ws-rs-network
+              
+    
+
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    ports:
+      - "3307:3306"
+    restart: always
+    environment:
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: xml-user
+      MYSQL_PASSWORD: rootpassword
+      MYSQL_DATABASE: xml
+    volumes:
+      - mysql-database-data-volume:/var/lib/mysql
+    networks:
+      - xml-ws-rs-network 
+  
+# Volumes
+volumes:
+  mysql-database-data-volume:
+
+networks:
+  xml-ws-rs-network:
+    name: xml-ws-rs-network

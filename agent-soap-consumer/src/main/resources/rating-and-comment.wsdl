@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:sch="www.rent-a-car.ws.xml.rs/rating-and-comment" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="www.rent-a-car.ws.xml.rs/rating-and-comment" targetNamespace="www.rent-a-car.ws.xml.rs/rating-and-comment">
+  <wsdl:types>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="www.rent-a-car.ws.xml.rs/rating-and-comment">
+    <xs:complexType name="CommentXML">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="user" type="xs:long"/>
+            <xs:element name="appointment" type="xs:long"/>
+            <xs:element name="car" type="xs:long"/>
+            <xs:element name="comment" type="xs:string"/>
+            <xs:element name="verified" type="xs:boolean"/>
+            <xs:element name="createdAt" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="RatingXML">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="appointment" type="xs:long"/>
+            <xs:element name="car" type="xs:long"/>
+            <xs:element name="user" type="xs:long"/>
+            <xs:element name="rating">
+                <xs:simpleType>
+                    <xs:restriction base="xs:int">
+                        <xs:minExclusive value="0"/>
+                        <xs:maxExclusive value="6"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="createdAt" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="allCommentsRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="company" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="allCommentsResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="comments" type="tns:CommentXML"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="allRatingRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="company" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="allRatingResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="ratings" type="tns:RatingXML"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="allCommentsRequest">
+    <wsdl:part element="tns:allCommentsRequest" name="allCommentsRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="allRatingResponse">
+    <wsdl:part element="tns:allRatingResponse" name="allRatingResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="allRatingRequest">
+    <wsdl:part element="tns:allRatingRequest" name="allRatingRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="allCommentsResponse">
+    <wsdl:part element="tns:allCommentsResponse" name="allCommentsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="RatingAndCommentPort">
+    <wsdl:operation name="allComments">
+      <wsdl:input message="tns:allCommentsRequest" name="allCommentsRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:allCommentsResponse" name="allCommentsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="allRating">
+      <wsdl:input message="tns:allRatingRequest" name="allRatingRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:allRatingResponse" name="allRatingResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="RatingAndCommentPortSoap11" type="tns:RatingAndCommentPort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="allComments">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="allCommentsRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="allCommentsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="allRating">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="allRatingRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="allRatingResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="RatingAndCommentPortService">
+    <wsdl:port binding="tns:RatingAndCommentPortSoap11" name="RatingAndCommentPortSoap11">
+      <soap:address location="http://DESKTOP-UVNRQ0Q:8060/ws"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

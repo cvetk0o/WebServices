@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:sch="www.rent-a-car.ws.xml.rs/filter-and-search" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="www.rent-a-car.ws.xml.rs/filter-and-search" targetNamespace="www.rent-a-car.ws.xml.rs/filter-and-search">
+  <wsdl:types>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="www.rent-a-car.ws.xml.rs/filter-and-search">
+    <xs:complexType name="CarXML">
+        <xs:sequence>
+            <xs:element name="id"/>
+            <xs:element name="plateNumber" type="tns:IdNameXML"/>
+            <xs:element name="model" type="tns:IdNameXML"/>
+            <xs:element name="fuelType" type="tns:IdNameXML"/>
+            <xs:element name="transmission" type="tns:IdNameXML"/>
+            <xs:element name="carClass" type="tns:IdNameXML"/>
+            <xs:element name="company" type="xs:long"/>
+            <xs:element name="owner" type="xs:long"/>
+            <xs:element name="mileage" type="xs:double"/>
+            <xs:element name="distanceAllowed" type="xs:double"/>
+            <xs:element name="price" type="xs:double"/>
+            <xs:element name="protection" type="xs:boolean"/>
+            <xs:element name="childSeats" type="xs:int"/>
+            <xs:element name="images">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" name="image" type="tns:IdNameXML"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="IdNameXML">
+        <xs:sequence>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="name" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="createCarRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="car" type="tns:CarXML"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="ApiResponseXML">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="message" type="xs:string"/>
+                <xs:element name="success" type="xs:boolean"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="removeCarRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="carId" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="updateCarRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="car" type="tns:CarXML"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="getAllCompanyDataRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="company" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="getAllCompanyDataResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="cars" type="tns:CarXML"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="brands" type="tns:IdNameXML"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="models" type="tns:IdNameXML"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="fuelTypes" type="tns:IdNameXML"/>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="transmissions" type="tns:IdNameXML"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="getAllCompanyDataResponse">
+    <wsdl:part element="tns:getAllCompanyDataResponse" name="getAllCompanyDataResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="removeCarRequest">
+    <wsdl:part element="tns:removeCarRequest" name="removeCarRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="updateCarRequest">
+    <wsdl:part element="tns:updateCarRequest" name="updateCarRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAllCompanyDataRequest">
+    <wsdl:part element="tns:getAllCompanyDataRequest" name="getAllCompanyDataRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createCarRequest">
+    <wsdl:part element="tns:createCarRequest" name="createCarRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="FilterPort">
+    <wsdl:operation name="getAllCompanyData">
+      <wsdl:input message="tns:getAllCompanyDataRequest" name="getAllCompanyDataRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getAllCompanyDataResponse" name="getAllCompanyDataResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="removeCar">
+      <wsdl:input message="tns:removeCarRequest" name="removeCarRequest">
+    </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="updateCar">
+      <wsdl:input message="tns:updateCarRequest" name="updateCarRequest">
+    </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="createCar">
+      <wsdl:input message="tns:createCarRequest" name="createCarRequest">
+    </wsdl:input>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="FilterPortSoap11" type="tns:FilterPort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getAllCompanyData">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="getAllCompanyDataRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getAllCompanyDataResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="removeCar">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="removeCarRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="updateCar">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="updateCarRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="createCar">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="createCarRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="FilterPortService">
+    <wsdl:port binding="tns:FilterPortSoap11" name="FilterPortSoap11">
+      <soap:address location="http://DESKTOP-UVNRQ0Q:8010/ws"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
